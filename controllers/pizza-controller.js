@@ -4,6 +4,12 @@ const pizzaController = {
     // get all pizzas
     getAllPizza(req, res) {
       Pizza.find({}) // sequelize uses findAll()
+        .populate({
+          path: 'comments',
+          select: '-__v' // do not populate __v and show others
+        })
+        .select('-__v') // do not return field __v
+        .sort({ _id: -1 }) // mongoose sort DESC 
         .then(dbPizzaData => res.json(dbPizzaData))
         .catch(err => {
           console.log(err);
@@ -14,6 +20,11 @@ const pizzaController = {
     // get one pizza by id
     getPizzaById({ params }, res) { // params deconstructed
       Pizza.findOne({ _id: params.id })
+        .populate({
+          path: 'comments',
+          select: '-__v'
+        })
+        .select('-__v')
         .then(dbPizzaData => {
           // If no pizza is found, send 404
           if (!dbPizzaData) {
