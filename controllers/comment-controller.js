@@ -34,7 +34,7 @@ const commentController = {
             { _id: params.commentId },
             //replies: body will update replies model inside comments
             { $push: { replies: body } }, 
-            { new: true }
+            { new: true, runValidators: true }
         )
         .then(dbPizzaData => {
             if (!dbPizzaData) {
